@@ -11,5 +11,5 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /opt/resources/ectur/mysql/data:/var/lib/mysql
-      - /opt/resources/ectur/mysql/config:/etc/mysql/conf.d
+      - /home/ivanstalyn/ectur/mysql/data:/var/lib/mysql
+      - /home/ivanstalyn/ectur/mysql/config:/etc/mysql/conf.d
