@@ -23,13 +23,15 @@ services:
           nocopy: true
 volumes: 
   mysql-data:
+    driver: local
     driver_opts: 
-      type: "none"
-      o: "bind"
-      device: "/home/ivanstalyn/ectur/mysql/data"
+      type: none
+      o: bind
+      device: /home/ivanstalyn/ectur/mysql/data
   mysql-config:
+    driver: local
     driver_opts: 
-      type: "none"
-      o: "bind"
-      device: "/home/ivanstalyn/ectur/mysql/config"
+      type: none
+      o: bind
+      device: /home/ivanstalyn/ectur/mysql/config"
  
