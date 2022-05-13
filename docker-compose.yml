@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  mysqldb:
+    image: mysql:latest
+    container_name: mysql_db
+    hostname: mysql.php.ec
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: entrar123
+    ports:
+      - "3306:3306"
+    volumes:
+      - type: volume
+        source: mysql-data
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+      - type: volume
+        source: mysql-config
+        target: /etc/mysql/conf.d
+        volume:
+          nocopy: true
+volumes: 
+  mysql-data:
+    driver_opts: 
+      type: "none"
+      o: "bind"
+      device: "/home/ivanstalyn/ectur/mysql/data"
+  mysql-config:
+    driver_opts: 
+      type: "none"
+      o: "bind"
+      device: "/home/ivanstalyn/ectur/mysql/config"
+ 
