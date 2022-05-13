@@ -11,27 +11,5 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - type: volume
-        source: mysql-data
-        target: /var/lib/mysql/
-        volume:
-          nocopy: true
-      - type: volume
-        source: mysql-config
-        target: /etc/mysql/conf.d
-        volume:
-          nocopy: true
-volumes: 
-  mysql-data:
-    driver: local
-    driver_opts: 
-      type: none
-      o: bind
-      device: /opt/resources/ectur/mysql/data
-  mysql-config:
-    driver: local
-    driver_opts: 
-      type: none
-      o: bind
-      device: /opt/resources/ectur/mysql/config
- 
+      - /opt/resources/ectur/mysql/data:/var/lib/mysql
+      - /opt/resources/ectur/mysql/config:/etc/mysql/conf.d
