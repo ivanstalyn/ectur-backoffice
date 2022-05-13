@@ -33,5 +33,5 @@ volumes:
     driver_opts: 
       type: none
       o: bind
-      device: /home/ivanstalyn/ectur/mysql/config"
+      device: /home/ivanstalyn/ectur/mysql/config
  
