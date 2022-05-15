@@ -1,15 +1,50 @@
 version: "3.7"
 
 services:
-  mysqldb:
-    image: mysql:latest
-    container_name: mysql_db
-    hostname: mysql.php.ec
+  ectur-db:
+    image: postgres:13.6
+    container_name: ectur-db-server
+    hostname: db.ectur
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: entrar123
-    ports:
-      - "3306:3306"
+      POSTGRES_USER: ecturuser
+      POSTGRES_PASSWORD: ectur-clave!.-
+      POSTGRES_DB: ecturdb
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - /home/ivanstalyn/ectur/mysql/data:/var/lib/mysql
-      - /home/ivanstalyn/ectur/mysql/config:/etc/mysql/conf.d
+      - type: volume
+        source: ectur-db-data
+        target: /var/lib/postgresql/data
+        volume:
+          nocopy: true
+
+  ectur-backoffice:
+    image: ivanstalyn/ectur-backoffice:1.0
+    container_name: ectur-backoffice-server
+    hostname: backoffice.ectur
+    restart: unless-stopped
+    depends_on:
+      - ectur-db
+    links:
+      - ectur-db
+
+  ectur-nginx:
+    image: ivanstalyn/ectur-proxy:1.0
+    container_name: ectur-nginx-server
+    hostname: nginx.ectur
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - ectur-db
+      - ectur-backoffice
+    links:
+      - ectur-db
+      - ectur-backoffice
+
+volumes: 
+  ectur-db-data:
+    driver_opts: 
+      type: none
+      o: "bind"
+      device: "/home/ivanstalyn/ectur/postgres"

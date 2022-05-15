@@ -1,2 +1,22 @@
 
 BD/*.bak
+
+
+#Maven
+ectur-backoffice/.mvn
+ectur-backoffice/bin/*
+ectur-backoffice/target/*
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Eclipse
+.project
+.classpath
+.settings
+
