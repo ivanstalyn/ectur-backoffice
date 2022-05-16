@@ -2,12 +2,8 @@
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 	<persistence-unit name="PUecturbackoffice" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>com.ectur.modelo.entidad.Mascota</class>
-		<class>com.ectur.modelo.entidad.Empleado</class>
-		<class>com.ectur.modelo.entidad.Propietario</class>
-		<class>com.ectur.modelo.entidad.Raza</class>
-		<class>com.ectur.modelo.entidad.RegistroAdopcion</class>
-	
+		<class>com.ectur.modelo.entidad.Empresa</class>
+
 		<properties>
 			<property name="javax.persistence.jdbc.url"	value="jdbc:postgresql://db.ectur:5432/ecturdb" />
 			<property name="javax.persistence.jdbc.driver"	value="org.postgresql.Driver" />

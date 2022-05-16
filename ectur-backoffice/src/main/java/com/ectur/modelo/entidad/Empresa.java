@@ -15,8 +15,8 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "raza")
-public class Raza implements Serializable{	
+@Table(name = "empresa")
+public class Empresa implements Serializable{	
 	
 	/**
 	 * 
@@ -30,9 +30,6 @@ public class Raza implements Serializable{
 	@Column(length = 45)
 	private String nombre;
 	
-	@OneToMany(cascade = CascadeType.REFRESH,mappedBy = "raza")
-	private List<Mascota>listaMascotas = new ArrayList<Mascota>();
-
 	public int getId() {
 		return id;
 	}
@@ -51,7 +48,7 @@ public class Raza implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Raza [id=" + id + ", nombre=" + nombre + "]";
+		return "Empresa [id=" + id + ", nombre=" + nombre + "]";
 	}
 		
 	

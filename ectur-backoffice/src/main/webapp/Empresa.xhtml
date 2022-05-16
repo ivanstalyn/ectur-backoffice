@@ -7,28 +7,28 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Registro de Razas de Animales</title>
+	<title>Registro de Empresas</title>
 </h:head>
 <h:body>
 	<ui:composition template="/index.xhtml">
 		<ui:define name="contenido">
 
-			<h:form id="formRaza">
+			<h:form id="formEmpresa">
 				<p:growl id="mensajes" showDetail="true" />
 				<!-- TOOLBAR -->
-				<p:panel header="Registro de Razas de Animales">
+				<p:panel header="Registro de Empresas">
 					<div class="card">
 						<p:toolbar>
 							<p:toolbarGroup>
 								<p:commandButton value="Nuevo" icon="pi pi-file"
 									styleClass="ui-button-outlined"
-									actionListener="#{razaVista.crear}"
+									actionListener="#{empresaVista.crear}"
 									oncomplete="PF('wvdlgFormulario').show()">
 								</p:commandButton>
 
 								<p:commandButton value="Exportar a PDF" icon="pi pi-file-pdf"
 									styleClass="ui-button-outlined ui-button-help" ajax="false">
-									<p:dataExporter type="pdf" target="dt_razas" fileName="razas" />
+									<p:dataExporter type="pdf" target="dt_empresas" fileName="empresas" />
 								</p:commandButton>
 
 							</p:toolbarGroup>
@@ -38,28 +38,28 @@
 
 				<!-- DATATABLE -->
 				<div class="card">
-					<p:dataTable lazy="null" id="dt_razas" widgetVar="wvdt_razas"
-						value="#{razaVista.listado}" var="objraza" paginator="true"
+					<p:dataTable lazy="null" id="dt_empresas" widgetVar="wvdt_empresas"
+						value="#{empresaVista.listado}" var="objempresa" paginator="true"
 						rows="5" paginatorPosition="bottom">
 
 						<f:facet name="header">
 							<div class="products-table-header">
 								<span class="filter-container ui-input-icon-left"> <i
 									class="pi pi-search"></i> <p:inputText id="globalFilter"
-										onkeyup="PF('wvdt_razas').filter()" placeholder="Buscar" />
+										onkeyup="PF('wvdt_empresas').filter()" placeholder="Buscar" />
 								</span>
 
 							</div>
 						</f:facet>
 
 
-						<p:column headerText="Id" sortBy="#{objraza.id}">
-							<p:outputLabel value="#{objraza.id}"></p:outputLabel>
+						<p:column headerText="Id" sortBy="#{objempresa.id}">
+							<p:outputLabel value="#{objempresa.id}"></p:outputLabel>
 						</p:column>
 
-						<p:column headerText="Nombre" sortBy="#{objraza.nombre}"
-							filterBy="#{objraza.nombre}">
-							<p:outputLabel value="#{objraza.nombre}"></p:outputLabel>
+						<p:column headerText="Nombre" sortBy="#{objempresa.nombre}"
+							filterBy="#{objempresa.nombre}">
+							<p:outputLabel value="#{objempresa.nombre}"></p:outputLabel>
 						</p:column>
 
 
@@ -67,19 +67,19 @@
 							<p:commandButton icon="pi pi-pencil"
 								styleClass="rounded-button ui-button-secondary"
 								oncomplete="PF('wvdlgFormulario').show()"
-								update="formRaza:dlgFormulario">
+								update="formEmpresa:dlgFormulario">
 
-								<f:setPropertyActionListener value="#{objraza}"
-									target="#{razaVista.raza}" />
+								<f:setPropertyActionListener value="#{objempresa}"
+									target="#{empresaVista.empresa}" />
 
 							</p:commandButton>
 
 							<p:commandButton icon="pi pi-trash"
-								oncomplete="PF('wvdeleteRazaDialog').show()"
+								oncomplete="PF('wvdeleteEmpresaDialog').show()"
 								styleClass="rounded-button ui-button-danger">
 
-								<f:setPropertyActionListener value="#{objraza}"
-									target="#{razaVista.raza}" />
+								<f:setPropertyActionListener value="#{objempresa}"
+									target="#{empresaVista.empresa}" />
 
 
 							</p:commandButton>
@@ -92,23 +92,23 @@
 
 				<!-- FORMULARIO -->
 				<div class="card">
-					<p:dialog header="Raza" widgetVar="wvdlgFormulario"
+					<p:dialog header="Empresa" widgetVar="wvdlgFormulario"
 						id="dlgFormulario" showEffect="fade" modal="true">
 
 						<h:panelGrid columns="4" cellpadding="7">
 
 							<p:outputLabel value="ID" />
-							<p:inputText value="#{razaVista.raza.id}" disabled="true" />
+							<p:inputText value="#{empresaVista.empresa.id}" disabled="true" />
 
 							<p:outputLabel value="Nombre" />
-							<p:inputText value="#{razaVista.raza.nombre}" />
+							<p:inputText value="#{empresaVista.empresa.nombre}" />
 
 
 						</h:panelGrid>
 						<f:facet name="footer">
 							<p:commandButton value="Guardar" styleClass="p-mt-3"
-								icon="pi pi-save" actionListener="#{razaVista.guardar}"
-								update="formRaza:dt_razas"
+								icon="pi pi-save" actionListener="#{empresaVista.guardar}"
+								update="formEmpresa:dt_empresas"
 								onclick="PF('wvdlgFormulario').hide()" />
 
 							<p:commandButton value="Cancelar"
@@ -121,17 +121,17 @@
 
 				<!-- DIALOGO CONFIRMACIÓN -->
 				<div class="card">
-					<p:confirmDialog widgetVar="wvdeleteRazaDialog" showEffect="fade"
+					<p:confirmDialog widgetVar="wvdeleteEmpresaDialog" showEffect="fade"
 						width="300" message="¿Estás seguro de eliminar el registro?"
 						header="Confirmar" severity="warn">
 
 						<p:commandButton value="Sí" icon="pi pi-check"
-							actionListener="#{razaVista.eliminar}" process="@this"
-							oncomplete="PF('wvdeleteRazaDialog').hide()" />
+							actionListener="#{empresaVista.eliminar}" process="@this"
+							oncomplete="PF('wvdeleteEmpresaDialog').hide()" />
 
 						<p:commandButton value="No" type="button"
 							styleClass="ui-button-secondary" icon="pi pi-times"
-							onclick="PF('wvdeleteRazaDialog').hide()" />
+							onclick="PF('wvdeleteEmpresaDialog').hide()" />
 
 					</p:confirmDialog>
 				</div>

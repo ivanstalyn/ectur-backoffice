@@ -2,8 +2,6 @@ package com.ectur.modelo.dao;
 
 import java.util.List;
 
-import com.ectur.modelo.entidad.Raza;
-
 public interface GenericaDao <T> {
 
 	public T create(T t);
