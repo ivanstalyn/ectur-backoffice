@@ -28,6 +28,21 @@ services:
     links:
       - ectur-db
 
+  ectur-ws:
+    image: ivanstalyn/ectur-ws:1.0
+    container_name: ectur-ws-server
+    hostname: backofficews.ectur
+    restart: unless-stopped
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db.ectur:5432/ecturdb
+      - SPRING_DATASOURCE_USERNAME=ecturuser
+      - SPRING_DATASOURCE_PASSWORD=ectur-clave!.-
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - ectur-db
+    links:
+      - ectur-db
+
   ectur-nginx:
     image: ivanstalyn/ectur-proxy:1.0
     container_name: ectur-nginx-server
@@ -38,9 +53,11 @@ services:
     depends_on:
       - ectur-db
       - ectur-backoffice
+      - ectur-ws
     links:
       - ectur-db
       - ectur-backoffice
+      - ectur-ws
 
 volumes: 
   ectur-db-data:
