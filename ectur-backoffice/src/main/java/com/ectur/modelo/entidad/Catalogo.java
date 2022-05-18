@@ -14,10 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name = "empresa")
-public class Empresa implements Serializable{	
+@Table(name = "catalogo")
+public class Catalogo implements Serializable{	
 	
 	/**
 	 * 
@@ -31,11 +30,8 @@ public class Empresa implements Serializable{
 	@Column(length = 45)
 	private String nombre;
 	
-	@OneToMany(cascade = CascadeType.REFRESH,mappedBy = "empresa", fetch = FetchType.LAZY)
-	private List<Usuario>listaUsuarios = new ArrayList<Usuario>();
-	
-	@OneToMany(cascade = CascadeType.REFRESH,mappedBy = "empresa", fetch = FetchType.LAZY)
-	private List<Producto>listaProductos = new ArrayList<Producto>();
+	@OneToMany(cascade = CascadeType.REFRESH,mappedBy = "catalogo", fetch = FetchType.LAZY)
+	private List<DetalleCatalogo>listaDetalleCatalogo = new ArrayList<DetalleCatalogo>();
 
 	public int getId() {
 		return id;
@@ -53,26 +49,17 @@ public class Empresa implements Serializable{
 		this.nombre = nombre;
 	}
 
-	public List<Usuario> getListaUsuarios() {
-		return listaUsuarios;
+	public List<DetalleCatalogo> getListaDetalleCatalogo() {
+		return listaDetalleCatalogo;
 	}
 
-	public void setListaUsuarios(List<Usuario> listaUsuarios) {
-		this.listaUsuarios = listaUsuarios;
-	}
-
-	public List<Producto> getListaProductos() {
-		return listaProductos;
-	}
-
-	public void setListaProductos(List<Producto> listaProductos) {
-		this.listaProductos = listaProductos;
+	public void setListaDetalleCatalogo(List<DetalleCatalogo> listaDetalleCatalogo) {
+		this.listaDetalleCatalogo = listaDetalleCatalogo;
 	}
 
 	@Override
 	public String toString() {
-		return "Empresa [id=" + id + ", nombre=" + nombre + ", listaUsuarios=" + listaUsuarios + ", listaProductos="
-				+ listaProductos + "]";
+		return "Catalogo [id=" + id + ", nombre=" + nombre + ", listaDetalleCatalogo=" + listaDetalleCatalogo + "]";
 	}
 	
 	
