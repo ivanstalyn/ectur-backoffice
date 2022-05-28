@@ -1,6 +1,8 @@
 package com.ectur.modelo.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -12,19 +14,36 @@ import com.ectur.modelo.dao.GenericaDao;
 public class GenericaDaoImpl<T> implements GenericaDao<T> {
 
 	private Class<T> entityClass;
-
-	protected static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("PUecturbackoffice");
+	
+	protected static EntityManagerFactory emf = null;
 	protected EntityManager entityManager;
 
 	// constructores
 	public GenericaDaoImpl() {
-		entityManager = emf.createEntityManager();//crear conexion
+		emf = Persistence.createEntityManagerFactory("PUecturbackoffice",getPropiedades());
+		entityManager = emf.createEntityManager();
+		
 	}
 
-	
+
 	public GenericaDaoImpl(Class<T> entityClass) {
 		this.entityClass = entityClass;
+		emf = Persistence.createEntityManagerFactory("PUecturbackoffice",getPropiedades());
 		entityManager = emf.createEntityManager();
+	}
+	
+	private Map<String, String> getPropiedades(){
+		
+		Map<String, String> propiedades = new HashMap<String, String>();
+		
+		
+			propiedades.put("javax.persistence.jdbc.driver", System.getenv("JPA_DRIVER"));
+			propiedades.put("javax.persistence.jdbc.url", System.getenv("JPA_URL"));
+			propiedades.put("javax.persistence.jdbc.user", System.getenv("JPA_USUARIO"));
+			propiedades.put("javax.persistence.jdbc.password", System.getenv("JPA_PASSWORD"));
+
+		propiedades.put("javax.persistence.schema-generation.database.action", "create");
+		return propiedades;
 	}
 
 	

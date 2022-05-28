@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Registro de Subcatálogos</title>
+</h:head>
+<h:body>
+	<ui:composition template="/index.xhtml">
+		<ui:define name="contenido">
+			
+			<h:form id="formDetalleCatalogo">
+				<p:growl id="mensajes" showDetail="true" />
+				<!-- TOOLBAR -->
+				<p:panel header="Registro de Subcatálogos">
+					<div class="card">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nuevo" icon="pi pi-file"
+									styleClass="ui-button-outlined"
+									actionListener="#{detalleCatalogoVista.crear}"
+									oncomplete="PF('wvdlgFormulario').show()">
+								</p:commandButton>
+
+								<p:commandButton value="Exportar a PDF" icon="pi pi-file-pdf"
+									styleClass="ui-button-outlined ui-button-help" ajax="false">
+									<p:dataExporter type="pdf" target="dt_detalleCatalogos"
+										fileName="subcatalogos" />
+								</p:commandButton>
+
+							</p:toolbarGroup>
+						</p:toolbar>
+					</div>
+				</p:panel>
+
+				<!-- DATATABLE -->
+				<div class="card">
+					<p:dataTable lazy="null" id="dt_detalleCatalogos" widgetVar="wvdt_detalleCatalogos"
+						value="#{detalleCatalogoVista.listado}" var="objdetalleCatalogo" paginator="true"
+						rows="5" paginatorPosition="bottom">
+
+						<f:facet name="header">
+							<div class="products-table-header">
+								<span class="filter-container ui-input-icon-left"> <i
+									class="pi pi-search"></i> <p:inputText id="globalFilter"
+										onkeyup="PF('wvdt_detalleCatalogos').filter()" placeholder="Buscar" />
+								</span>
+
+							</div>
+						</f:facet>
+
+						<p:column headerText="Id" sortBy="#{objdetalleCatalogo.id}">
+							<p:outputLabel value="#{objdetalleCatalogo.id}"></p:outputLabel>
+						</p:column>
+						<p:column headerText="Nombre" sortBy="#{objdetalleCatalogo.nombre}"
+							filterBy="#{objdetalleCatalogo.nombre}">
+							<p:outputLabel value="#{objdetalleCatalogo.nombre}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Catálogo">
+							<p:outputLabel value="#{objdetalleCatalogo.catalogo.nombre}"></p:outputLabel>
+						</p:column>
+
+						<p:column exportable="false">
+							<p:commandButton icon="pi pi-pencil"
+								styleClass="rounded-button ui-button-secondary"
+								oncomplete="PF('wvdlgFormulario').show()"
+								update="formDetalleCatalogo:dlgFormulario">
+
+								<f:setPropertyActionListener value="#{objdetalleCatalogo}"
+									target="#{detalleCatalogoVista.detalleCatalogo}" />
+
+							</p:commandButton>
+
+							<p:commandButton icon="pi pi-trash"
+								oncomplete="PF('wvdeleteDetalleCatalogoDialog').show()"
+								styleClass="rounded-button ui-button-danger">
+
+								<f:setPropertyActionListener value="#{objdetalleCatalogo}"
+									target="#{detalleCatalogoVista.detalleCatalogo}" />
+
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+				</div>
+
+				<!-- FORMULARIO NUEVO -->
+				<div class="card">
+					<p:dialog header="Subcatálogo" widgetVar="wvdlgFormulario"
+						id="dlgFormulario" showEffect="fade" modal="true">
+
+						<h:panelGrid columns="4" cellpadding="7">
+
+							<p:outputLabel value="ID" />
+							<p:inputText value="#{detalleCatalogoVista.detalleCatalogo.id}" disabled="true" />
+
+							<p:outputLabel value="Nombre" />
+							<p:inputText value="#{detalleCatalogoVista.detalleCatalogo.nombre}" />
+
+							<p:outputLabel value="Catalogo" />
+							<p:selectOneMenu id="cbCatalogo" value="#{detalleCatalogoVista.catalogoId}">
+								<f:selectItem itemLabel="Seleccione una opción" itemValue="" />
+								<f:selectItems value="#{detalleCatalogoVista.listadoCatalogos}" var="catlg"
+									itemLabel="#{catlg.nombre}" itemValue="#{catlg.id}" />
+
+							</p:selectOneMenu>
+
+						</h:panelGrid>
+						<f:facet name="footer">
+							<p:commandButton value="Guardar" styleClass="p-mt-3"
+								icon="pi pi-save" actionListener="#{detalleCatalogoVista.guardar}"
+								update="formDetalleCatalogo:dt_detalleCatalogos"
+								onclick="PF('wvdlgFormulario').hide()" />
+
+							<p:commandButton value="Cancelar"
+								styleClass="p-mt-3 ui-button-danger" icon="pi pi-times"
+								onclick="PF('wvdlgFormulario').hide()" />
+
+						</f:facet>
+					</p:dialog>
+				</div>
+
+				<!-- DIALOGO CONFIRMACIÓN -->
+				<div class="card">
+					<p:confirmDialog widgetVar="wvdeleteDetalleCatalogoDialog"
+						showEffect="fade" width="300"
+						message="¿Estás seguro de eliminar el subcatálogo?" header="Confirmar"
+						severity="warn">
+
+						<p:commandButton value="Sí" icon="pi pi-check"
+							actionListener="#{detalleCatalogoVista.eliminar}" process="@this"
+							oncomplete="PF('wvdeleteDetalleCatalogoDialog').hide()" />
+
+						<p:commandButton value="No" type="button"
+							styleClass="ui-button-secondary" icon="pi pi-times"
+							onclick="PF('wvdeleteDetalleCatalogoDialog').hide()" />
+
+					</p:confirmDialog>
+				</div>
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

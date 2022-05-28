@@ -102,7 +102,7 @@ class CreacionDatos {
 			user.setIdentificacion("id12347");
 			user.setTelefono("0998654321");
 			user.setEmail("gregori@correo.com");
-			user.setFoto("foto02");
+			user.setFoto("");
 			user.setPassword("clave1234");
 			user.setUsername("gbonilla");
 			user.setFechaNacimiento(new SimpleDateFormat("yyyy-MM-dd").parse("2001-08-12"));

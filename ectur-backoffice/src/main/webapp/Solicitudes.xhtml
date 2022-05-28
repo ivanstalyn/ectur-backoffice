@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Control de solicitudes de compra</title>
+</h:head>
+<h:body>
+	<ui:composition template="/index.xhtml">
+		<ui:define name="contenido">
+
+			
+			<h:form id="formSolicitud">
+				<p:growl id="mensajes" showDetail="true" />
+				<!-- TOOLBAR -->
+				<p:panel header="Control de solicitudes de compra">
+					<div class="card">
+						<p:toolbar>
+							<p:toolbarGroup>
+								
+								<p:commandButton value="Exportar a PDF" icon="pi pi-file-pdf"
+									styleClass="ui-button-outlined ui-button-help" ajax="false">
+									<p:dataExporter type="pdf" target="dt_solicituds"
+										fileName="paquetesturisticos" />
+								</p:commandButton>
+
+							</p:toolbarGroup>
+						</p:toolbar>
+					</div>
+				</p:panel>
+
+				<!-- DATATABLE -->
+				<div class="card">
+					<p:dataTable lazy="null" id="dt_solicituds" widgetVar="wvdt_solicituds"
+						value="#{solicitudVista.listado}" var="objsolicitud" paginator="true"
+						rows="5" paginatorPosition="bottom">
+
+						<f:facet name="header">
+							<div class="products-table-header">
+								<span class="filter-container ui-input-icon-left"> <i
+									class="pi pi-search"></i> <p:inputText id="globalFilter"
+										onkeyup="PF('wvdt_solicituds').filter()" placeholder="Buscar" />
+								</span>
+
+							</div>
+						</f:facet>
+
+						<p:column headerText="Id" sortBy="#{objsolicitud.id}">
+							<p:outputLabel value="#{objsolicitud.id}"></p:outputLabel>
+						</p:column>
+						<p:column headerText="Título" sortBy="#{objsolicitud.producto.nombre}"
+							filterBy="#{objsolicitud.producto.nombre}">
+							<p:outputLabel value="#{objsolicitud.producto.nombre}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Precio" sortBy="#{objsolicitud.producto.precio}">
+							<p:outputLabel value="#{objsolicitud.producto.precio}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Usuario">
+							<p:outputLabel value="#{objsolicitud.usuario.nombres}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="email">
+							<p:outputLabel value="#{objsolicitud.usuario.email}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="status">
+							<p:outputLabel value="#{objsolicitud.estado.nombre}"></p:outputLabel>
+						</p:column>
+
+						<p:column exportable="false">
+							<p:commandButton icon="pi pi-pencil"
+								styleClass="rounded-button ui-button-secondary"
+								oncomplete="PF('wvdlgFormulario').show()"
+								update="formSolicitud:dlgFormulario">
+
+								<f:setPropertyActionListener value="#{objsolicitud}"
+									target="#{solicitudVista.solicitud}" />
+
+							</p:commandButton>
+
+							<p:commandButton icon="pi pi-trash"
+								oncomplete="PF('wvdeleteSolicitudDialog').show()"
+								styleClass="rounded-button ui-button-danger">
+
+								<f:setPropertyActionListener value="#{objsolicitud}"
+									target="#{solicitudVista.solicitud}" />
+
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+				</div>
+
+				<!-- FORMULARIO NUEVO -->
+				<div class="card">
+					<p:dialog header="Paquetes Turísticos" widgetVar="wvdlgFormulario"
+						id="dlgFormulario" showEffect="fade" modal="true">
+
+						<h:panelGrid columns="2" cellpadding="7">
+
+							<p:outputLabel value="ID" />
+							<p:inputText value="#{solicitudVista.solicitud.id}" disabled="true" />
+
+							<p:outputLabel value="Usuario" />
+							<p:selectOneMenu id="cbUsuario" value="#{solicitudVista.usuarioId}">
+								<f:selectItem itemLabel="Seleccione una opción" itemValue="" />
+								<f:selectItems value="#{solicitudVista.listadoUsuarios}" var="catlg"
+									itemLabel="#{catlg.nombres}" itemValue="#{catlg.id}" />
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Mensaje" />
+							<p:inputTextarea rows="5" cols="30" counter="display" maxlength="1000"
+                         		counterTemplate="{0} caracteres faltantes." autoResize="false"
+                         		value="#{solicitudVista.solicitud.mensaje}"	/>
+                        	
+                         	<p:outputLabel value="" />
+        					<h:outputText id="display" class="p-d-block" />
+        					
+        					<p:outputLabel value="Fecha inicial viaje"/>
+							<p:datePicker value="#{solicitudVista.solicitud.fechaInicioEvento}"
+								locale="es" monthNavigator="true" yearNavigator="true"
+								pattern="yyyy-MM-dd" />
+								
+							<p:outputLabel value="Fecha terminación viaje"/>
+							<p:datePicker value="#{solicitudVista.solicitud.fechaFinalEvento}"
+								locale="es" monthNavigator="true" yearNavigator="true"
+								pattern="yyyy-MM-dd" />
+							
+						</h:panelGrid>
+						<f:facet name="footer">
+							<p:commandButton value="Guardar" styleClass="p-mt-3"
+								icon="pi pi-save" actionListener="#{solicitudVista.guardar}"
+								update="formSolicitud:dt_solicituds"
+								onclick="PF('wvdlgFormulario').hide()" />
+
+							<p:commandButton value="Cancelar"
+								styleClass="p-mt-3 ui-button-danger" icon="pi pi-times"
+								onclick="PF('wvdlgFormulario').hide()" />
+
+						</f:facet>
+					</p:dialog>
+				</div>
+
+				<!-- DIALOGO CONFIRMACIÓN -->
+				<div class="card">
+					<p:confirmDialog widgetVar="wvdeleteSolicitudDialog"
+						showEffect="fade" width="300"
+						message="¿Estás seguro de eliminar el paquete turístico?" header="Confirmar"
+						severity="warn">
+
+						<p:commandButton value="Sí" icon="pi pi-check"
+							actionListener="#{solicitudVista.eliminar}" process="@this"
+							oncomplete="PF('wvdeleteSolicitudDialog').hide()" />
+
+						<p:commandButton value="No" type="button"
+							styleClass="ui-button-secondary" icon="pi pi-times"
+							onclick="PF('wvdeleteSolicitudDialog').hide()" />
+
+					</p:confirmDialog>
+				</div>
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

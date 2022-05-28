@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Registro de Paquetes Turísticoss</title>
+</h:head>
+<h:body>
+	<ui:composition template="/index.xhtml">
+		<ui:define name="contenido">
+		<script type="text/javascript">
+				PrimeFaces.locales['es'] = {
+					closeText : 'Cerrar',
+					prevText : 'Anterior',
+					nextText : 'Siguiente',
+					monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril',
+							'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre',
+							'Octubre', 'Noviembre', 'Diciembre' ],
+					monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May',
+							'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+					dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Miércoles',
+							'Jueves', 'Viernes', 'Sábado' ],
+					dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie',
+							'Sab' ],
+					dayNamesMin : [ 'D', 'L', 'M', 'X', 'J', 'V', 'S' ],
+					weekHeader : 'Semana',
+					firstDay : 1,
+					isRTL : false,
+					showMonthAfterYear : false,
+					yearSuffix : '',
+					timeOnlyTitle : 'Sólo hora',
+					timeText : 'Tiempo',
+					hourText : 'Hora',
+					minuteText : 'Minuto',
+					secondText : 'Segundo',
+					millisecondText : 'Milisegundo',
+					currentText : 'Fecha actual',
+					ampm : false,
+					month : 'Mes',
+					week : 'Semana',
+					day : 'Día',
+					allDayText : 'Todo el día',
+					today : 'Hoy',
+					clear : 'Claro'
+				};
+			</script>
+			
+			<h:form id="formProducto">
+				<p:growl id="mensajes" showDetail="true" />
+				<!-- TOOLBAR -->
+				<p:panel header="Registro de Paquetes Turísticoss">
+					<div class="card">
+						<p:toolbar>
+							<p:toolbarGroup>
+								<p:commandButton value="Nuevo" icon="pi pi-file"
+									styleClass="ui-button-outlined"
+									actionListener="#{productoVista.crear}"
+									oncomplete="PF('wvdlgFormulario').show()">
+								</p:commandButton>
+
+								<p:commandButton value="Exportar a PDF" icon="pi pi-file-pdf"
+									styleClass="ui-button-outlined ui-button-help" ajax="false">
+									<p:dataExporter type="pdf" target="dt_productos"
+										fileName="paquetesturisticos" />
+								</p:commandButton>
+
+							</p:toolbarGroup>
+						</p:toolbar>
+					</div>
+				</p:panel>
+
+				<!-- DATATABLE -->
+				<div class="card">
+					<p:dataTable lazy="null" id="dt_productos" widgetVar="wvdt_productos"
+						value="#{productoVista.listado}" var="objproducto" paginator="true"
+						rows="5" paginatorPosition="bottom">
+
+						<f:facet name="header">
+							<div class="products-table-header">
+								<span class="filter-container ui-input-icon-left"> <i
+									class="pi pi-search"></i> <p:inputText id="globalFilter"
+										onkeyup="PF('wvdt_productos').filter()" placeholder="Buscar" />
+								</span>
+
+							</div>
+						</f:facet>
+
+						<p:column headerText="Id" sortBy="#{objproducto.id}">
+							<p:outputLabel value="#{objproducto.id}"></p:outputLabel>
+						</p:column>
+						<p:column headerText="Nombre" sortBy="#{objproducto.nombre}"
+							filterBy="#{objproducto.nombre}">
+							<p:outputLabel value="#{objproducto.nombre}"></p:outputLabel>
+						</p:column>
+						
+						<p:column headerText="Precio" sortBy="#{objproducto.precio}">
+							<p:outputLabel value="#{objproducto.precio}"></p:outputLabel>
+						</p:column>
+
+						<p:column headerText="Empresa">
+							<p:outputLabel value="#{objproducto.empresa.nombre}"></p:outputLabel>
+						</p:column>
+
+						<p:column exportable="false">
+							<p:commandButton icon="pi pi-pencil"
+								styleClass="rounded-button ui-button-secondary"
+								oncomplete="PF('wvdlgFormulario').show()"
+								update="formProducto:dlgFormulario">
+
+								<f:setPropertyActionListener value="#{objproducto}"
+									target="#{productoVista.producto}" />
+
+							</p:commandButton>
+
+							<p:commandButton icon="pi pi-trash"
+								oncomplete="PF('wvdeleteProductoDialog').show()"
+								styleClass="rounded-button ui-button-danger">
+
+								<f:setPropertyActionListener value="#{objproducto}"
+									target="#{productoVista.producto}" />
+
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+				</div>
+
+				<!-- FORMULARIO NUEVO -->
+				<div class="card">
+					<p:dialog header="Paquetes Turísticos" widgetVar="wvdlgFormulario"
+						id="dlgFormulario" showEffect="fade" modal="true">
+
+						<h:panelGrid columns="2" cellpadding="7">
+
+							<p:outputLabel value="ID" />
+							<p:inputText value="#{productoVista.producto.id}" disabled="true" />
+
+							<p:outputLabel value="Empresa" />
+							<p:selectOneMenu id="cbEmpresa" value="#{productoVista.empresaId}">
+								<f:selectItem itemLabel="Seleccione una opción" itemValue="" />
+								<f:selectItems value="#{productoVista.listadoEmpresas}" var="catlg"
+									itemLabel="#{catlg.nombre}" itemValue="#{catlg.id}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Nombre" />
+							<p:inputText value="#{productoVista.producto.nombre}" />
+							
+							<p:outputLabel value="Descripción" />
+							<p:inputTextarea rows="5" cols="30" counter="display" maxlength="1000"
+                         		counterTemplate="{0} caracteres faltantes." autoResize="false"
+                         		value="#{productoVista.producto.descripcion}"	/>
+                         	
+                         	
+                         	<p:outputLabel value="" />
+        					<h:outputText id="display" class="p-d-block" />
+        					
+        					<p:outputLabel value="Precio" />
+							<p:inputText value="#{productoVista.producto.precio}" />
+        					
+        					<p:outputLabel value="Fecha inicial viaje"/>
+							<p:datePicker value="#{productoVista.producto.fechaInicioEvento}"
+								locale="es" monthNavigator="true" yearNavigator="true"
+								pattern="yyyy-MM-dd" />
+								
+							<p:outputLabel value="Fecha terminación viaje"/>
+							<p:datePicker value="#{productoVista.producto.fechaFinalEvento}"
+								locale="es" monthNavigator="true" yearNavigator="true"
+								pattern="yyyy-MM-dd" />
+							
+						</h:panelGrid>
+						<f:facet name="footer">
+							<p:commandButton value="Guardar" styleClass="p-mt-3"
+								icon="pi pi-save" actionListener="#{productoVista.guardar}"
+								update="formProducto:dt_productos"
+								onclick="PF('wvdlgFormulario').hide()" />
+
+							<p:commandButton value="Cancelar"
+								styleClass="p-mt-3 ui-button-danger" icon="pi pi-times"
+								onclick="PF('wvdlgFormulario').hide()" />
+
+						</f:facet>
+					</p:dialog>
+				</div>
+
+				<!-- DIALOGO CONFIRMACIÓN -->
+				<div class="card">
+					<p:confirmDialog widgetVar="wvdeleteProductoDialog"
+						showEffect="fade" width="300"
+						message="¿Estás seguro de eliminar el paquete turístico?" header="Confirmar"
+						severity="warn">
+
+						<p:commandButton value="Sí" icon="pi pi-check"
+							actionListener="#{productoVista.eliminar}" process="@this"
+							oncomplete="PF('wvdeleteProductoDialog').hide()" />
+
+						<p:commandButton value="No" type="button"
+							styleClass="ui-button-secondary" icon="pi pi-times"
+							onclick="PF('wvdeleteProductoDialog').hide()" />
+
+					</p:confirmDialog>
+				</div>
+
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

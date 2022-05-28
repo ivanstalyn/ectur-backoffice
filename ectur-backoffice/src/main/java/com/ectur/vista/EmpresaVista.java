@@ -54,7 +54,7 @@ public class EmpresaVista implements Serializable {
 		}
 		
 		listar();
-		PrimeFaces.current().ajax().update("formEmpresa:mensajes", "formEmpresa:dt_Empresas");
+		PrimeFaces.current().ajax().update("formEmpresa:mensajes", "formEmpresa:dt_empresas");
 	}
 	
 	public void eliminar() {
@@ -63,10 +63,10 @@ public class EmpresaVista implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empresa eliminada correctamente"));
 		}catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Empresa no se eliminó porque está asociada a una mascota", null));
+					"Empresa no se eliminó porque está asociada a un Producto", null));
 		}
 		listar();
-		PrimeFaces.current().ajax().update("formEmpresa:mensajes", "formEmpresa:dt_Empresas");
+		PrimeFaces.current().ajax().update("formEmpresa:mensajes", "formEmpresa:dt_empresas");
 	}
 	
 	public void listar() {

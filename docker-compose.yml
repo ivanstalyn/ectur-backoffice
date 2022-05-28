@@ -6,11 +6,13 @@ services:
     container_name: ectur-db-server
     hostname: db.ectur
     restart: unless-stopped
+    ports:
+      - "15432:5432"
     environment:
-      POSTGRES_USER: ecturuser
-      POSTGRES_PASSWORD: ectur-clave!.-
-      POSTGRES_DB: ecturdb
-      PGDATA: /var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=ecturuser
+      - POSTGRES_PASSWORD=ectur-clave!.-
+      - POSTGRES_DB=ecturdb
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - type: volume
         source: ectur-db-data
@@ -23,6 +25,11 @@ services:
     container_name: ectur-backoffice-server
     hostname: backoffice.ectur
     restart: unless-stopped
+    environment:
+      - JPA_DRIVER=org.postgresql.Driver
+      - JPA_URL=jdbc:postgresql://db.ectur:5432/ecturdb
+      - JPA_USUARIO=ecturuser
+      - JPA_PASSWORD=ectur-clave!.-
     depends_on:
       - ectur-db
     links:
@@ -50,6 +57,12 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+    volumes:
+      - type: volume
+        source: ectur-imagenes
+        target: /var/www/imagenes
+        volume:
+          nocopy: true
     depends_on:
       - ectur-db
       - ectur-backoffice
@@ -59,9 +72,14 @@ services:
       - ectur-backoffice
       - ectur-ws
 
-volumes: 
+volumes:
   ectur-db-data:
-    driver_opts: 
+    driver_opts:
       type: none
       o: "bind"
       device: "/home/ivanstalyn/ectur/postgres"
+  ectur-imagenes:
+    driver_opts:
+      type: none
+      o: "bind"
+      device: "/home/ivanstalyn/ectur/www/imagenes"
